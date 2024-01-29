@@ -8,6 +8,10 @@ import (
 )
 
 func Go(token Scanner) {
+	/*
+		TODO: Add AMSI support
+	*/
+
 	initial_threat := []string{}
 
 	fileContents, err := os.ReadFile(token.File)
@@ -45,14 +49,15 @@ func Go(token Scanner) {
 
 	for low < high {
 
+		/* Start the search from the middle of the file */
 		mid := low + (high-low)/2
 
+		/* Just to make sure that our mid is never out of bounds */
 		if mid > fileSize {
 			mid = fileSize
 		}
 
-		// utils.PrintInfo(fmt.Sprintf("Checking range: %d to %d", low, mid))
-
+		/* Temporarily write the slice to a file */
 		part := fileContents[low:mid]
 		tempFile, err := os.CreateTemp("", "gocheck")
 		if err != nil {
@@ -67,12 +72,14 @@ func Go(token Scanner) {
 		}
 		tempFile.Close()
 
+		/* Send to MpCmdRun.exe */
 		flagged, _, err := e.ScanFile(tempFile.Name())
 		if err != nil {
 			utils.PrintErr(err.Error())
 			return
 		}
 
+		/* Done scanning, can delete the temp files now */
 		err = os.Remove(tempFile.Name())
 		if err != nil {
 			utils.PrintErr(err.Error())
@@ -86,15 +93,22 @@ func Go(token Scanner) {
 				fp = true
 			}
 
+			/* Drop the upper range to the middle if we found malicious bytes */
 			high = mid
+
+			/* Save the slice for isolation, incase we can't find a clean range */
 			flaggedPart = part
 		} else {
 
 			if !ntf {
-
+				/*
+					We found the lower range, now we need to find the upper range.
+				*/
 				utils.PrintInfo(fmt.Sprintf("Found clean bytes in range: %d to %d, attempting to find malicious high range", low, mid))
 				ntf = true
 			}
+
+			/* Budget solution to find a clean range given an exponential factor */
 			if ef > 0 {
 				low = low + ef
 				ef = ef * 3
@@ -108,8 +122,6 @@ func Go(token Scanner) {
 		utils.PrintOk(fmt.Sprintf("Isolated malicious bytes to range: %d to %d", high-len(flaggedPart), high))
 		e.HexDump(flaggedPart)
 
-		// the exact memory address, in the form 0x0000000000000000 (16 bytes)
-
 		utils.PrintNewLine()
 		utils.PrintErr(fmt.Sprintf("Found %d unique detections", len(initial_threat)))
 		for _, threat := range initial_threat {
@@ -119,6 +131,14 @@ func Go(token Scanner) {
 		utils.PrintNewLine()
 
 	} else {
+
+		/*
+
+			KNOWN ISSUES
+			Given the nature of malware, it's possible that the 50% middle slice may ignore/overlap malicious bytes.
+			This is not accounted for in this POC because I am ~lazy~
+
+		*/
 
 		utils.PrintNewLine()
 
