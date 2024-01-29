@@ -16,41 +16,6 @@ Flags:
   -h, --help          help for check
 ```
 
-## Example (mimikatz)
-```cmd
-PC@Zavier MINGW64 ~/Desktop/git/gocheck/bin (main)
-$ ./GoCheck64.exe check --file ../tests/mimikatz.exe --defender
-[*] Found Windows Defender at C:\Program Files\Windows Defender\MpCmdRun.exe
-[*] Target file size: 1250056 bytes
-
-[*] Found malicious bytes in range: 0 to 625028, attempting to isolate slice...
-[*] Found clean bytes in range: 0 to 152, attempting to find malicious high range
-
-[+] Isolated malicious bytes to range: 0 to 305
-000000: 4d 5a 90 00 03 00 00 00 04 00 00 00 ff ff 00 00  |MZ..............|
-000010: b8 00 00 00 00 00 00 00 40 00 00 00 00 00 00 00  |........@.......|
-000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  |................|
-000030: 00 00 00 00 00 00 00 00 00 00 00 00 20 01 00 00  |............ ...|
-000040: 0e 1f ba 0e 00 b4 09 cd 21 b8 01 4c cd 21 54 68  |........!..L.!Th|
-000050: 69 73 20 70 72 6f 67 72 61 6d 20 63 61 6e 6e 6f  |is program canno|
-000060: 74 20 62 65 20 72 75 6e 20 69 6e 20 44 4f 53 20  |t be run in DOS |
-000070: 6d 6f 64 65 2e 0d 0d 0a 24 00 00 00 00 00 00 00  |mode....$.......|
-000080: 34 c8 d8 22 70 a9 b6 71 70 a9 b6 71 70 a9 b6 71  |4.."p..qp..qp..q|
-000090: 79 d1 23 71 72 a9 b6 71 79 d1 35 71 4f a9 b6 71  |y.#qr..qy.5qO..q|
-0000a0: 79 d1 32 71 60 a9 b6 71 79 d1 25 71 72 a9 b6 71  |y.2q`..qy.%qr..q|
-0000b0: 6b 34 2a 71 72 a9 b6 71 16 47 7d 71 74 a9 b6 71  |k4*qr..q.G}qt..q|
-0000c0: eb 42 7d 71 72 a9 b6 71 06 34 db 71 72 a9 b6 71  |.B}qr..q.4.qr..q|
-0000d0: 6e fb 32 71 72 a9 b6 71 06 34 cd 71 5f a9 b6 71  |n.2qr..q.4.q_..q|
-0000e0: 70 a9 b7 71 0a ab b6 71 57 6f c8 71 71 a9 b6 71  |p..q...qWo.qq..q|
-0000f0: 79 d1 3f 71 13 a9 b6 71 79 d1 22 71 71 a9 b6 71  |y.?q...qy."qq..q|
-000100: 79 d1 27 71 71 a9 b6 71 52 69 63 68 70 a9 b6 71  |y.'qq..qRichp..q|
-000110: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  |................|
-000120: 50 45 00 00 64 86 06 00 63 39 5a 5e 00 00 00 00  |PE..d...c9Z^....|
-
-[!] Found 1 unique detections
-[+] Detected as: HackTool:Win32/Mimikatz!pz
-```
-
 ## Example (Cobalt Strike Beacon)
 ```cmd
 $ ./GoCheck64.exe check --file ../tests/default_cobalt_beacon.exe --defender
