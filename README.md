@@ -66,3 +66,8 @@ $ ./GoCheck64.exe check --file ../tests/default_cobalt_beacon.exe --defender
 [!] Found 1 unique detections
 [+] Detected as: Backdoor:Win64/CobaltStrike.NP!dha
 ```
+
+## note
+not very stable and has _lots_ of false negatives due to the way the current byte array slicing is implemented.
+
+lots of bytes and potential malicious signatures are being missed due to that oversight o7
