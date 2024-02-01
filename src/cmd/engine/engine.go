@@ -17,7 +17,6 @@ func NewEngine(path string) *Engine {
 }
 
 func (e *Engine) ScanFile(filePath string) (bool, string, error) {
-
 	absFilePath, err := filepath.Abs(filePath)
 	if err != nil {
 		return false, "", err
@@ -43,9 +42,7 @@ func (e *Engine) ScanFile(filePath string) (bool, string, error) {
 }
 
 func (e *Engine) HexDump(data []byte) {
-	/*
-		creds: https://github.com/matterpreter/DefenderCheck/blob/master/DefenderCheck/DefenderCheck/Program.cs
-	*/
+	fmt.Printf("Hex Dumping %d bytes\n", len(data))
 
 	const bytesPerLine = 16
 

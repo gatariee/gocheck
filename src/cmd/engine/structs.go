@@ -7,9 +7,8 @@ type Scanner struct {
 	EnginePath string
 }
 
-type ScanResult struct {
-	Flagged              bool
-	FlaggedByte          byte
-	FlaggedByteIndex     int
-	LastFlaggedByteIndex int
+type ScanResult string
+
+type DefenderScanner struct {
+	Path string
 }

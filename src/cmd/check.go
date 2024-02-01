@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/spf13/cobra"
 
@@ -23,18 +24,14 @@ var checkCmd = &cobra.Command{
 		defender, _ := cmd.Flags().GetBool("defender")
 
 		if !amsi && !defender {
-			cmd.Help()
-
-			utils.PrintNewLine()
-			utils.PrintErr("Please select either AMSI or Windows Defender to check against the file.")
-			utils.PrintNewLine()
-			return
+			defender = true
 		}
 
 		var (
 			defender_path string
 			err           error
 		)
+
 		if defender {
 			defender_path, err = FindDefenderPath("C:\\")
 			if err != nil {
@@ -54,7 +51,13 @@ var checkCmd = &cobra.Command{
 			EnginePath: defender_path,
 		}
 
+		// start timer
+
+		start := time.Now()
 		engine.Go(token)
+		elapsed := time.Since(start)
+
+		utils.PrintOk(fmt.Sprintf("Total time elasped: %s", elapsed))
 	},
 }
 
