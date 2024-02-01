@@ -16,8 +16,6 @@ func newDefenderScanner(path string) *DefenderScanner {
 	return &DefenderScanner{Path: path}
 }
 
-// new channel, called "threat"
-
 const (
 	NoThreatFound ScanResult = "NoThreatFound"
 	ThreatFound   ScanResult = "ThreatFound"
