@@ -51,8 +51,6 @@ var checkCmd = &cobra.Command{
 			EnginePath: defender_path,
 		}
 
-		// start timer
-
 		start := time.Now()
 		engine.Go(token)
 		elapsed := time.Since(start)

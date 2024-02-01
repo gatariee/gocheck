@@ -2,7 +2,6 @@ package engine
 
 import (
 	"bytes"
-	"fmt"
 	"os/exec"
 	"path/filepath"
 	"strings"
@@ -39,36 +38,6 @@ func (e *Engine) ScanFile(filePath string) (bool, string, error) {
 	}
 
 	return false, "", nil
-}
-
-func (e *Engine) HexDump(data []byte) {
-	fmt.Printf("Hex Dumping %d bytes\n", len(data))
-
-	const bytesPerLine = 16
-
-	for i := 0; i < len(data); i += bytesPerLine {
-		fmt.Printf("%06x: ", i)
-
-		for j := 0; j < bytesPerLine; j++ {
-			if i+j < len(data) {
-				fmt.Printf("%02x ", data[i+j])
-			} else {
-				fmt.Print("   ")
-			}
-		}
-
-		fmt.Print(" |")
-		for j := 0; j < bytesPerLine; j++ {
-			if i+j < len(data) {
-				if data[i+j] >= 32 && data[i+j] <= 126 {
-					fmt.Printf("%c", data[i+j])
-				} else {
-					fmt.Print(".")
-				}
-			}
-		}
-		fmt.Println("|")
-	}
 }
 
 func (e *Engine) extractThreat(scanOutput string) string {

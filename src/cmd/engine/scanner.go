@@ -108,7 +108,6 @@ func Go(token Scanner) {
 		}
 	}()
 
-	// target file: x bytes
 	size := len(original_file)
 	utils.PrintInfo(fmt.Sprintf("Scanning %s, analyzing %d bytes...", token.File, size))
 
@@ -146,7 +145,7 @@ func Go(token Scanner) {
 
 		mid = lastGood + (upperBound-lastGood)/2
 	}
-	// Print the result
+
 	if threatFound {
 		utils.PrintNewLine()
 		utils.PrintErr(fmt.Sprintf("Isolated bad bytes at offset 0x%X in the original file [approximately %d / %d bytes]", lastGood, lastGood, size))

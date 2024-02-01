@@ -3,6 +3,9 @@
 
 GoCheck is a tool for identifying exact bytes that are flagged by Windows Defender by splitting a file into chunks and feeding them to `MpCmdRun.exe`.
 
+![GoCheck](./assets/294b1c050917a60e4eb68dd3963ff453.png)
+![GoCheck2](./assets/gocheck_windef.gif)
+
 ## Usage
 ```cmd
 $ ./GoCheck64.exe check --help
@@ -16,6 +19,7 @@ Flags:
   -h, --help          help for check
 ```
 
+<<<<<<< Updated upstream
 ## Example (Cobalt Strike Beacon)
 ```cmd
 $ ./GoCheck64.exe check --file ../tests/default_cobalt_beacon.exe --defender
@@ -65,6 +69,14 @@ $ ./GoCheck64.exe check --file ../tests/default_cobalt_beacon.exe --defender
 
 [!] Found 1 unique detections
 [+] Detected as: Backdoor:Win64/CobaltStrike.NP!dha
+=======
+## Installation
+Download the latest release from the [releases](https://github.com/gatariee/GoCheck/releases), or build it from source.
+```bash
+git clone https://github.com/gatariee/GoCheck
+cd gocheck/src
+make windows
+>>>>>>> Stashed changes
 ```
 
 ## note
