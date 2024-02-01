@@ -3,7 +3,6 @@
 
 GoCheck is a tool for identifying exact bytes that are flagged by Windows Defender by splitting a file into chunks and feeding them to `MpCmdRun.exe`.
 
-![GoCheck](./assets/294b1c050917a60e4eb68dd3963ff453.png)
 ![GoCheck2](./assets/gocheck_windef.gif)
 
 ## Usage
