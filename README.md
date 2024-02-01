@@ -25,3 +25,25 @@ git clone https://github.com/gatariee/GoCheck
 cd gocheck/src
 make windows
 ```
+
+## Benchmark
+
+## mimikatz.exe (1,250,056 bytes / 1.19 MB)
+> single run
+
+| Tool | Time |
+|------|------|
+| GoCheck | 1.05s |
+| DefenderCheck | 5.56s |
+
+![comparison1](./assets/38138d0696414c4828e0caf498a8f0e1.png)
+
+## Sliver HTTP Beacon (10,972,160 bytes / 10.4 MB)
+> single run
+
+| Tool | Time |
+|------|------|
+| GoCheck | 5.65s |
+| DefenderCheck | 35.69s |
+
+![comparison2](./assets/8bf97de7a1fd7b1a6d56362b3eaad39b.png)
