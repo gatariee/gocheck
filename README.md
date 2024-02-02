@@ -1,7 +1,7 @@
 # GoCheck
 > Heavily inspired by [ThreatCheck](https://github.com/rasta-mouse/ThreatCheck) and [DefenderCheck](https://github.com/matterpreter/DefenderCheck)
 
-GoCheck is a tool for identifying exact bytes that are flagged by Windows Defender by splitting a file into chunks and feeding them to `MpCmdRun.exe`.
+GoCheck a blazingly fast™ alternative to Matterpreter's [DefenderCheck](https://github.com/matterpreter/DefenderCheck) which identifies the exact bytes that Windows Defender AV by feeding byte slices to `MpCmdRun.exe`.
 
 ![GoCheck2](./assets/gocheck_windef.gif)
 
@@ -29,7 +29,6 @@ make windows
 ## Benchmark
 
 ## mimikatz.exe (1,250,056 bytes / 1.19 MB)
-> single run
 
 | Tool | Time |
 |------|------|
@@ -39,7 +38,6 @@ make windows
 ![comparison1](./assets/38138d0696414c4828e0caf498a8f0e1.png)
 
 ## Sliver HTTP Beacon (10,972,160 bytes / 10.4 MB)
-> single run
 
 | Tool | Time |
 |------|------|
