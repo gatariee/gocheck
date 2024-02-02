@@ -1,7 +1,5 @@
 # GoCheck
-> Heavily inspired by [ThreatCheck](https://github.com/rasta-mouse/ThreatCheck) and [DefenderCheck](https://github.com/matterpreter/DefenderCheck)
-
-GoCheck a blazingly fast™ alternative to Matterpreter's [DefenderCheck](https://github.com/matterpreter/DefenderCheck) which identifies the exact bytes that Windows Defender AV by feeding byte slices to `MpCmdRun.exe`.
+GoCheck a blazingly fast™ alternative to Matterpreter's [DefenderCheck](https://github.com/matterpreter/DefenderCheck) which identifies the exact bytes that Windows Defender AV by feeding byte slices to `MpCmdRun.exe`
 
 ![GoCheck2](./assets/gocheck_windef.gif)
 
@@ -28,7 +26,7 @@ make windows
 
 ## Benchmark
 
-## mimikatz.exe (1,250,056 bytes / 1.19 MB)
+### mimikatz.exe (1,250,056 bytes / 1.19 MB)
 
 | Tool | Time |
 |------|------|
@@ -37,7 +35,7 @@ make windows
 
 ![comparison1](./assets/38138d0696414c4828e0caf498a8f0e1.png)
 
-## Sliver HTTP Beacon (10,972,160 bytes / 10.4 MB)
+### Sliver HTTP Beacon (10,972,160 bytes / 10.4 MB)
 
 | Tool | Time |
 |------|------|
@@ -45,3 +43,6 @@ make windows
 | DefenderCheck | 35.69s |
 
 ![comparison2](./assets/8bf97de7a1fd7b1a6d56362b3eaad39b.png)
+
+## Credits / References
+* Originally implemented by [Matterpreter](https://github.com/matterpreter) in [DefenderCheck](https://github.com/matterpreter/DefenderCheck)
