@@ -5,8 +5,6 @@ GoCheck a blazingly fast™ alternative to Matterpreter's [DefenderCheck](https:
 
 ## Usage
 ```cmd
-go install github.com/gatariee/gocheck/cli@latest
-
 $ gocheck check --help
 Usage:
   gocheck check [flags]
@@ -20,7 +18,12 @@ Flags:
 ```
 
 ## Installation
-Download the latest release from the [releases](https://github.com/gatariee/GoCheck/releases), or build it from source.
+You can install `gocheck` from `go install`
+```bash
+go install github.com/gatariee/gocheck/cli@latest
+```
+
+Alternatively, you can download the precompiled binaries from the [releases](https://github.com/gatariee/GoCheck/releases) or build it yourself.
 ```bash
 git clone https://github.com/gatariee/GoCheck
 cd gocheck/src
