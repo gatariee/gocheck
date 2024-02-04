@@ -6,6 +6,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
+const (
+	VERSION = "v0.5.0"
+	URL     = "https://github.com/gatariee/GoCheck"
+)
+
 var rootCmd = &cobra.Command{
 	Use:   "gocheck",
 	Short: "A Golang CLI tool to test the evasiveness of your malware.",
@@ -40,4 +45,6 @@ func Execute() {
 
 func init() {
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	rootCmd.Version = VERSION
+	rootCmd.SetVersionTemplate("GoCheck version {{.Version}}\n")
 }

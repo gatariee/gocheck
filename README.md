@@ -5,7 +5,9 @@ GoCheck a blazingly fast™ alternative to Matterpreter's [DefenderCheck](https:
 
 ## Usage
 ```cmd
-$ ./GoCheck64.exe check --help
+go install github.com/gatariee/gocheck/cli@latest
+
+$ gocheck check --help
 Usage:
   gocheck check [flags]
 
@@ -14,6 +16,7 @@ Flags:
   -d, --defender      Use Windows Defender to scan the binary
   -f, --file string   Binary to check
   -h, --help          help for check
+
 ```
 
 ## Installation
