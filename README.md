@@ -20,7 +20,7 @@ Flags:
 ## Installation
 You can install `gocheck` from `go install`
 ```bash
-go install github.com/gatariee/gocheck/cli@latest
+go install github.com/gatariee/gocheck@latest
 ```
 
 Alternatively, you can download the precompiled binaries from the [releases](https://github.com/gatariee/GoCheck/releases) or build it yourself.
