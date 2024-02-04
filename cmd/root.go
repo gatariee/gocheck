@@ -26,7 +26,7 @@ var rootCmd = &cobra.Command{
 ⠀⠀⠀⠀⠀⠀⠈⠳⢤⣀⡶⠤⣷⣅⡀⠀⠀⠀⣀⡠⢔⠕⠁⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠫⠿⠿⠿⠛⠋⠁⠀⠀⠀⠀
 
-A tool to identify byte chunks that are flagged by AMSI or Windows Defender.
+A tool to identify byte chunks that are flagged by AMSI or Windows Defender
 	
 	`,
 }
