@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	VERSION = "v0.5.0"
+	VERSION = "v1.0.1"
 	URL     = "https://github.com/gatariee/GoCheck"
 )
 
