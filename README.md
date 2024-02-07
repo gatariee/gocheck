@@ -53,6 +53,16 @@ make [ windows / win64 / win32 ]
 ```
 
 ## Benchmark
+> ⚠️ I am not an expert in benchmarking, and the following benchmarks are conducted on a single machine, and the results may vary on different machines. The benchmarks are conducted on a single machine to provide a rough estimate of the performance difference between `gocheck` and `DefenderCheck`.
+
+The objective of `gocheck` was to implement a faster alternative to Matterpreter's [DefenderCheck](https://github.com/matterpreter/DefenderCheck) as I realized that it was painfully slow when scanning large binaries, which can be quite a headache for extremely large binaries such as those written in Golang.
+
+The following benchmarks were conducted on the following specifications:
+* **OS**: Windows 10 Pro
+* **CPU**: AMD Ryzen™ 5 3600X
+* **RAM**: 32 GB DDR4 3200 MHz
+
+The I/O operations were conducted on a Samsung 870 EVO SATA 2.5" SSD (1 TB), 560/530 MB/s R/W, the temporary binaries are stored in the `C:\Temp` directory.
 
 ### mimikatz.exe (1,250,056 bytes / 1.19 MB)
 
@@ -74,3 +84,4 @@ make [ windows / win64 / win32 ]
 
 ## Credits / References
 * Originally implemented by [Matterpreter](https://github.com/matterpreter) in [DefenderCheck](https://github.com/matterpreter/DefenderCheck)
+* https://github.com/rasta-mouse/ThreatCheck
