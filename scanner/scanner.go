@@ -30,7 +30,7 @@ func (ds *DefenderScanner) Scan(filePath string, threat_names chan string) ScanR
 		return FileNotFound
 	}
 
-	// top 10 headaches of all time XD
+	// TODO: convert to abs before passing into the function, if this errors out- it's not actually handled properly in the caller.
 	absFilePath, err := filepath.Abs(filePath)
 	if err != nil {
 		return Error
@@ -48,6 +48,8 @@ func (ds *DefenderScanner) Scan(filePath string, threat_names chan string) ScanR
 	if strings.Contains(stdOut, "Threat  ") {
 
 		threat := extractThreat(stdOut)
+
+		/* yeah, there has to be a better way to do this. */
 		threat_names <- threat
 
 		return ThreatFound
