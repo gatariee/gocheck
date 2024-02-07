@@ -14,12 +14,18 @@ import (
 )
 
 var checkCmd = &cobra.Command{
-	Use:   "check",
+	Use:   "check [path_to_bin] /optional",
 	Short: "",
 	Long:  ``,
+	Args:  cobra.ExactArgs(1),
 
 	Run: func(cmd *cobra.Command, args []string) {
-		file, _ := cmd.Flags().GetString("file")
+		/*
+			@ previous usage
+				file, _ := cmd.Flags().GetString("file")
+		*/
+
+		file := args[0]
 		amsi, _ := cmd.Flags().GetBool("amsi")
 		defender, _ := cmd.Flags().GetBool("defender")
 
@@ -61,9 +67,6 @@ var checkCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(checkCmd)
-
-	checkCmd.Flags().StringP("file", "f", "", "Binary to check")
-	checkCmd.MarkFlagRequired("file")
 
 	checkCmd.Flags().BoolP("amsi", "a", false, "Use AMSI to scan the binary")
 	checkCmd.Flags().BoolP("defender", "d", false, "Use Windows Defender to scan the binary")
