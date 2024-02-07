@@ -23,11 +23,10 @@ You can install `gocheck` from `go install`
 go install github.com/gatariee/gocheck@latest
 ```
 
-Alternatively, you can download the precompiled binaries from the [releases](https://github.com/gatariee/GoCheck/releases) or build it yourself.
+Alternatively, you can download the precompiled binaries from the [releases](https://github.com/gatariee/gocheck/releases) or build it yourself.
 ```bash
-git clone https://github.com/gatariee/GoCheck
-cd gocheck/src
-make windows
+git clone https://github.com/gatariee/gocheck
+make [ windows / win64 / win32 ]
 ```
 
 ## Benchmark
