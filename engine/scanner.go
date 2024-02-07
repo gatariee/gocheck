@@ -48,6 +48,8 @@ func (ds *DefenderScanner) Scan(filePath string, threat_names chan string) ScanR
 	if strings.Contains(stdOut, "Threat  ") {
 
 		threat := extractThreat(stdOut)
+
+		/* yeah, there has to be a better way to do this. */
 		threat_names <- threat
 
 		return ThreatFound
