@@ -1,7 +1,7 @@
 # GoCheck
 GoCheck a blazingly fast™ alternative to Matterpreter's [DefenderCheck](https://github.com/matterpreter/DefenderCheck) which identifies the exact bytes that Windows Defender AV by feeding byte slices to `MpCmdRun.exe`
 
-![GoCheck2](./assets/gocheck_windef.gif)
+![GoCheck2](./assets/cobalt.gif)
 
 ## Usage
 ```cmd
@@ -16,6 +16,29 @@ Flags:
   -h, --help          help for check
 
 ```
+
+### Evasion Usage
+Usage of `gocheck` to identify bad bytes, and pass the offset into [ghidra](https://github.com/NationalSecurityAgency/ghidra) (or, any other decompiler) to hopefully decompile the binary and identify the bad bytes in a function.
+
+I'll be using `ghidra` to decompile the binary and identify the bad bytes in a function since I'm more familiar with it. (and, it's free)
+#### 1. Check for Bad Bytes
+```cmd
+$ gocheck <file> /optional:args
+```
+
+![1](./assets/f14b57d0ca353d1de97ec67c98512cd1.png)
+* Identified bad bytes at offset **0x9DD** (from start of binary)
+* 16 bytes **before & after** the bad bytes are also printed for context, but doesn't help much in this case.
+
+#### 2. Open the binary in Ghidra
+* Navigation -> Go To... -> **FILE ( 0x9DD )**
+  * Alternatively, `G` also brings up the same dialog.
+
+![2](./assets/587cc1659ee36bfb12a9f2525fac40cb.png)
+
+* The bad bytes are identified after a call to `VirtualAlloc` and before a call to `VirtualProtect` in this case, which should be easy to find in the artifact kit.
+
+![3](./assets/f6386e807de01acfa9bc301e2c0920c9.png)
 
 ## Installation
 You can install `gocheck` from `go install`
