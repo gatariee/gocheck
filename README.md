@@ -18,9 +18,9 @@ Flags:
 ```
 
 ### Evasion Usage
-Usage of `gocheck` to identify bad bytes, and pass the offset into [ghidra](https://github.com/NationalSecurityAgency/ghidra) (or, any other decompiler) to hopefully decompile the binary and identify the bad bytes in a function.
+You can use `gocheck` to identify bad bytes, and then pass the identified offset of bad bytes into [ghidra](https://github.com/NationalSecurityAgency/ghidra) (or, any other decompiler) to hopefully decompile the binary and locate the bad bytes in a function.
 
-I'll be using `ghidra` to decompile the binary and identify the bad bytes in a function since I'm more familiar with it. (and, it's free)
+I'll be using `ghidra` to decompile the binary since I'm more familiar with it. (and, it's free)
 #### 1. Check for Bad Bytes
 ```cmd
 $ gocheck <file> /optional:args
