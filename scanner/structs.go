@@ -1,4 +1,4 @@
-package engine
+package scanner
 
 type Scanner struct {
 	File       string

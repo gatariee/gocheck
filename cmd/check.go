@@ -9,7 +9,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	engine "github.com/gatariee/gocheck/engine"
+	scanner "github.com/gatariee/gocheck/scanner"
 	utils "github.com/gatariee/gocheck/utils"
 )
 
@@ -50,7 +50,7 @@ var checkCmd = &cobra.Command{
 
 		utils.PrintInfo(fmt.Sprintf("Found Windows Defender at %s", defender_path))
 
-		token := engine.Scanner{
+		token := scanner.Scanner{
 			File:       file,
 			Amsi:       amsi,
 			Defender:   defender,
@@ -58,7 +58,7 @@ var checkCmd = &cobra.Command{
 		}
 
 		start := time.Now()
-		engine.Run(token)
+		scanner.Run(token)
 		elapsed := time.Since(start)
 
 		utils.PrintOk(fmt.Sprintf("Total time elasped: %s", elapsed))
