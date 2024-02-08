@@ -17,6 +17,12 @@ Flags:
 
 ```
 
+## Installation
+You can install `gocheck` from `go install`
+```bash
+go install github.com/gatariee/gocheck@latest
+```
+
 ### Evasion Usage
 You can use `gocheck` to identify bad bytes, and then pass the identified offset of bad bytes into [ghidra](https://github.com/NationalSecurityAgency/ghidra) (or, any other decompiler) to hopefully decompile the binary and locate the bad bytes in a function.
 
@@ -39,12 +45,6 @@ $ gocheck <file> /optional:args
 * The bad bytes are identified after a call to `VirtualAlloc` and before a call to `VirtualProtect` in this case, which should be easy to find in the artifact kit.
 
 ![3](./assets/f6386e807de01acfa9bc301e2c0920c9.png)
-
-## Installation
-You can install `gocheck` from `go install`
-```bash
-go install github.com/gatariee/gocheck@latest
-```
 
 Alternatively, you can download the precompiled binaries from the [releases](https://github.com/gatariee/gocheck/releases) or build it yourself.
 ```bash
