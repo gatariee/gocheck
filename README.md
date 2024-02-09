@@ -27,6 +27,24 @@ $ gocheck <file> /optional:args
 
 > This may be changed in the future.
 
+## Windows Defender
+```cmd
+gocheck [path_to_binary] /optional: --defender
+```
+![windef](https://i.gyazo.com/6d23db9f3a97787948aa5362d7a57423.png)
+
+## AMSI
+```cmd
+gocheck [path_to_file] /optional: --amsi
+```
+![amsi](https://i.gyazo.com/6f3baf7640005e13ea3ffe0cfde7e230.png)
+
+## Both Windows Defender & AMSI
+```cmd
+gocheck [path_to_file] /optional: --defender --amsi
+```
+![both](https://i.gyazo.com/a6843d0b4a5ca5d5ae023eba8d39676a.png)
+
 ## Installation
 You can install `gocheck` from `go install`
 ```bash
