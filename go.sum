@@ -1,4 +1,6 @@
 github.com/cpuguy83/go-md2man/v2 v2.0.3/go.mod h1:tgQtvFlXSQOSOSIRvRPT7W67SCa46tRHOmNcaadrF8o=
+github.com/garethjensen/amsi v0.0.0-20180303015433-eb8d5f740669 h1:AiQEkP6s81dg3b/+wwY4u2OJIPHyV28cSP9R1lV7imA=
+github.com/garethjensen/amsi v0.0.0-20180303015433-eb8d5f740669/go.mod h1:n0f50c5UcAiPwx6RJ9Ky0m376hHJqmKXjDyqmjnGajk=
 github.com/inconshreveable/mousetrap v1.1.0 h1:wN+x4NVGpMsO7ErUn/mUI3vEoE6Jt13X2s0bqwp9tc8=
 github.com/inconshreveable/mousetrap v1.1.0/go.mod h1:vpF70FUmC8bwa3OWnCshd2FqLfsEA9PFc4w1p2J65bw=
 github.com/russross/blackfriday/v2 v2.1.0/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQDYRxCVz55jmeOWTM=

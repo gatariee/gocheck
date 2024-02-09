@@ -7,14 +7,19 @@ import (
 	"github.com/gatariee/gocheck/cmd"
 )
 
+var suffixes = []string{".exe", ".dll", ".sys", ".drv", ".ps1"}
+
 func main() {
-	/* If the second arg ends with a .exe, we'll just assume that the user meant to run the check command */
-	if len(os.Args) > 1 && strings.HasSuffix(os.Args[1], ".exe") {
-		/*
-			What are you gonna do about it? (ง'̀-'́)ง
-		*/
-		os.Args = append([]string{os.Args[0], "check"}, os.Args[1:]...)
+	if len(os.Args) > 1 {
+		for _, suffix := range suffixes {
+			if strings.HasSuffix(os.Args[1], suffix) {
+				os.Args = append([]string{os.Args[0], "check"}, os.Args[1:]...)
+			}
+		}
 	}
+	/*
+		What are you gonna do about it? (ง'̀-'́)ง
+	*/
 
 	cmd.Execute()
 }

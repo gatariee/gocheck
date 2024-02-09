@@ -12,12 +12,23 @@ Usage:
   gocheck check [flags]
 
 Flags:
-  -a, --amsi          Use AMSI to scan the binary
-  -d, --defender      Use Windows Defender to scan the binary
+  -a, --amsi          Use AMSI to scan a file
+  -d, --defender      Use Windows Defender to scan a binary
   -f, --file string   Binary to check
   -h, --help          help for check
-
 ```
+
+## Quick Use
+The `check` cobra flag is only used for ease of extensibility in the event that I finally decide to integrate [Ghidra's Headless Analyzer](https://static.grumpycoder.net/pixel/support/analyzeHeadlessREADME.html) with `gocheck`. For ease of use, you can actually completely omit the `check` flag and directly pass the file to `gocheck` as an argument.
+
+```cmd
+$ gocheck <file> /optional:args
+```
+
+> This may be changed in the future.
+
+## Windows Defender
+
 
 ## Installation
 You can install `gocheck` from `go install`

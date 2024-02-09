@@ -30,6 +30,8 @@ var checkCmd = &cobra.Command{
 		defender, _ := cmd.Flags().GetBool("defender")
 
 		if !amsi && !defender {
+			/* Assume that the user wants to use defender */
+			utils.PrintInfo("No flags provided, defaulting to Windows Defender")
 			defender = true
 		}
 
@@ -44,11 +46,11 @@ var checkCmd = &cobra.Command{
 				utils.PrintErr(err.Error())
 				return
 			}
+			utils.PrintInfo(fmt.Sprintf("Found Windows Defender at %s", defender_path))
 		} else {
+			/* If we're not using defender, we can assume an empty string */
 			defender_path = ""
 		}
-
-		utils.PrintInfo(fmt.Sprintf("Found Windows Defender at %s", defender_path))
 
 		token := scanner.Scanner{
 			File:       file,
