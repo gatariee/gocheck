@@ -1,6 +1,8 @@
 # GoCheck
 GoCheck a blazingly fast™ alternative to Matterpreter's [DefenderCheck](https://github.com/matterpreter/DefenderCheck) which identifies the exact bytes that Windows Defender AV by feeding byte slices to `MpCmdRun.exe`
 
+Accompanying blog post: [Identifying Malicious Bytes in Malware](https://gatari.dev/posts/identifying-malicious-bytes-in-malware/)
+
 ![GoCheck2](./assets/cobalt.gif)
 
 ## Usage
