@@ -27,9 +27,6 @@ $ gocheck <file> /optional:args
 
 > This may be changed in the future.
 
-## Windows Defender
-
-
 ## Installation
 You can install `gocheck` from `go install`
 ```bash

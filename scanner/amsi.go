@@ -35,12 +35,6 @@ func (as *AMSIScanner) Scan(filePath string) (amsi.ScanResult, error) {
 	session := amsi.OpenSession()
 	defer amsi.CloseSession(session)
 
-	// sample := []byte("AMSI Test Sample: 7e72c3ce-861b-4339-8740-0ac1484c1386")
-	/* Thanks, Rasta :P */
-	/* https://github.com/rasta-mouse/ThreatCheck/blob/master/ThreatCheck/ThreatCheck/Amsi/AmsiInstance.cs */
-	// test := session.ScanBuffer(sample)
-	// fmt.Println(test)
-
 	result := session.ScanBuffer(fileData)
 	return result, nil
 }
