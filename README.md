@@ -28,22 +28,38 @@ $ gocheck <file> /optional:args
 > This may be changed in the future.
 
 ## Windows Defender
+Real-time protection is optional when scanning using Windows Defender. If real-time protection is enabled, the file may be nuked on first scan. In order to prevent the file from being nuked on first scan, you can set an exclusion for the original file in Windows Defender as `gocheck` creates temporary copies and chucks them into C:\Temp.
 ```cmd
 gocheck [path_to_binary] /optional: --defender
 ```
-![windef](https://i.gyazo.com/6d23db9f3a97787948aa5362d7a57423.png)
+![windef](https://i.gyazo.com/3c9b5366f9565e0b3891d70ee78e70a2.png)
 
 ## AMSI
+When scanning using AMSI, do ensure that real-time protection is enabled. However, at first your file may be nuked.
 ```cmd
 gocheck [path_to_file] /optional: --amsi
 ```
-![amsi](https://i.gyazo.com/6f3baf7640005e13ea3ffe0cfde7e230.png)
+![nuked](https://i.gyazo.com/0ca26f2f63d0118df6fbd1e6e786eee8.png)
+
+In order to prevent the file from being nuked on first scan, you can set an exclusion for the original file in Windows Defender as `gocheck` creates temporary copies and chucks them into C:\Temp.
+```ps
+Add-MpPreference -ExclusionPath [path_to_folder]
+```
+![amsi](https://i.gyazo.com/0c0a437eafe2c945c7d1188fdd9ec86d.png)
 
 ## Both Windows Defender & AMSI
+You can also scan using both Windows Defender and AMSI at the same time.
 ```cmd
 gocheck [path_to_file] /optional: --defender --amsi
 ```
-![both](https://i.gyazo.com/a6843d0b4a5ca5d5ae023eba8d39676a.png)
+![both](https://i.gyazo.com/5bb7681b57cd8736329ccd22ac7e9d7c.png)
+
+## Debug
+Gocheck is in heavy WIP and may not work as expected. If you encounter any issues, please run the tool with `--debug` to provide more information about the issue. The `--debug` flag prints out which portions of the binary are being scanned, as well as sanity checks to ensure that the signatured portions are being correctly scanned. 
+```cmd
+gocheck [path_to_file] /optional: --debug
+```
+![debug](https://i.gyazo.com/c6bb797e5b507b2ba7fc0d007575a410.png)
 
 ## Installation
 You can install `gocheck` from `go install`
@@ -91,6 +107,8 @@ The following benchmarks were conducted on the following specifications:
 * **RAM**: 32 GB DDR4 3200 MHz
 
 The I/O operations were conducted on a Samsung 870 EVO SATA 2.5" SSD (1 TB), 560/530 MB/s R/W, the temporary binaries are stored in the `C:\Temp` directory.
+
+The version of `gocheck` used in the benchmark is [`v0.1.0`](https://github.com/gatariee/gocheck/releases/download/v1.3.0/gocheck64.exe) and the version of `DefenderCheck` used was the commit [`27616de`](https://github.com/matterpreter/DefenderCheck/commit/27616dea8d27a9d926f5b2178b114109f482c60b) (Sep 15, 2023).
 
 ### mimikatz.exe (1,250,056 bytes / 1.19 MB)
 
