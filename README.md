@@ -3,6 +3,8 @@ GoCheck a blazingly fast™ alternative to Matterpreter's [DefenderCheck](https:
 
 I also wrote a blog post showcasing this project: [Identifying Malicious Bytes in Malware](https://gatari.dev/posts/identifying-malicious-bytes-in-malware/)
 
+![both](https://i.gyazo.com/5bb7681b57cd8736329ccd22ac7e9d7c.png)
+
 ![GoCheck2](./assets/cobalt.gif)
 
 ## Usage
