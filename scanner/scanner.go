@@ -22,16 +22,16 @@ const (
 	Error         ScanResult = "Error"
 )
 
-func Run(token Scanner) {
+func Run(token Scanner, debug bool) {
 	if token.Defender {
-		err := ScanWindef(token)
+		err := ScanWindef(token, debug)
 		if err != nil {
 			utils.PrintErr(err.Error())
 		}
 	}
 
 	if token.Amsi {
-		err := ScanAMSI(token.File)
+		err := ScanAMSI(token.File, debug)
 		if err != nil {
 			utils.PrintErr(err.Error())
 		}

@@ -2,6 +2,8 @@ package utils
 
 import (
 	"fmt"
+
+	"github.com/fatih/color"
 )
 
 func PrintNewLine() {
@@ -13,13 +15,25 @@ func Print(msg string) {
 }
 
 func PrintOk(msg string) {
-	fmt.Println("[+]", msg)
+	color.HiGreen(fmt.Sprintf("[+] %s", msg))
 }
 
 func PrintInfo(msg string) {
-	fmt.Println("[*]", msg)
+	color.Yellow(fmt.Sprintf("[*] %s", msg))
 }
 
 func PrintErr(msg string) {
-	fmt.Println("[!]", msg)
+	color.HiRed(fmt.Sprintf("[!] %s", msg))
+}
+
+func PrintDebug(msg string, debug bool) {
+	if debug {
+		fmt.Println("[DEBUG]", msg)
+	}
+}
+
+func PrintDebugNewLine(debug bool) {
+	if debug {
+		fmt.Println("")
+	}
 }
