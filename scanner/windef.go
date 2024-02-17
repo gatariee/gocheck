@@ -52,9 +52,12 @@ func (ds *DefenderScanner) Scan(filePath string, threat_names chan string) ScanR
 	return NoThreatFound
 }
 
-func ScanWindef(token Scanner) error {
+func ScanWindef(token Scanner, debug bool) error {
 	/* Setup */
 	scanner := newDefenderScanner(token.EnginePath)
+
+	utils.PrintDebug(fmt.Sprintf("Scanning %s with Windows Defender...", token.File), debug)
+
 	original_file, err := os.ReadFile(token.File)
 	if err != nil {
 		return err
@@ -77,7 +80,7 @@ func ScanWindef(token Scanner) error {
 		utils.PrintInfo("File looks clean, no threat detected")
 		return nil
 	} else {
-		utils.PrintErr("Threat detected in the original file, beginning binary search...")
+		utils.PrintInfo("Threat detected in the original file, beginning binary search...")
 	}
 
 	/* Create a temporary directory to store the scanning files */
@@ -90,35 +93,114 @@ func ScanWindef(token Scanner) error {
 	lastGood := 0                    // lower range
 	upperBound := len(original_file) // upper range
 	mid := upperBound / 2            // pivot point
+
 	threatFound := false
+	tf_lower := 0
+	tf_upper := upperBound
+	tnf_upper := upperBound
 
 	for upperBound-lastGood > 1 {
 		// utils.PrintInfo(fmt.Sprintf("scanning from %d to %d bytes", lastGood, mid))
 
-		err := os.WriteFile(testFilePath, original_file[0:mid], 0o644)
+		err := os.WriteFile(testFilePath, original_file[tf_lower:mid], 0o644)
 		if err != nil {
 			utils.PrintErr(fmt.Sprintf("failed to write to test file: %s", err))
 			return err
 		}
 
+		utils.PrintDebug(fmt.Sprintf("scanning from 0 to %d bytes", mid), debug)
+
 		if scanner.Scan(testFilePath, threat_names) == ThreatFound {
+
+			utils.PrintDebug(fmt.Sprintf("threat detected in the range 0 to %d bytes", mid), debug)
 
 			/*
 				Since we found a threat in the slice, we'll set the upper range to whatever the pivot point is.
 			*/
 			threatFound = true
 			upperBound = mid
+
+			/* Save the last found threat range */
+			tf_upper = mid
 		} else {
+			utils.PrintDebug(fmt.Sprintf("no threat detected in the range 0 to %d bytes", mid), debug)
 			/*
 				We didn't find a threat in this slice, so we flip to the other half of the slice.
 			*/
 			lastGood = mid // lower range becomes the pivot (middle)
+			tnf_upper = mid
 		}
 
 		mid = lastGood + (upperBound-lastGood)/2
+
+		utils.PrintDebugNewLine(debug)
 	}
 
 	if threatFound {
+
+		if debug {
+
+			if _, err := os.Stat("debug"); os.IsNotExist(err) {
+				os.Mkdir("debug", 0o755)
+			} else {
+				utils.PrintInfo("debug directory already exists, deleting contents and creating new files")
+				os.RemoveAll("debug")
+				utils.PrintOk("deleted debug directory")
+				os.Mkdir("debug", 0o755)
+			}
+
+			utils.PrintDebugNewLine(debug)
+
+			utils.PrintDebug(fmt.Sprintf("%d to %d bytes were: NOT MALICIOUS ", tf_lower, tnf_upper), debug)
+			utils.PrintDebug(fmt.Sprintf("%d to %d bytes were: MALICIOUS ", tf_lower, tf_upper), debug)
+
+			err = os.WriteFile("./debug/last_bad_bytes.exe", original_file[tf_lower:tf_upper], 0o644)
+			if err != nil {
+				utils.PrintErr(fmt.Sprintf("failed to write to last_bad_bytes.exe: %s", err))
+				return err
+			}
+
+			utils.PrintInfo("Saving last bad bytes to: last_bad_bytes.exe")
+
+			file, err := os.ReadFile("./debug/last_bad_bytes.exe")
+			if err != nil {
+				utils.PrintErr(fmt.Sprintf("failed to read last_bad_bytes.exe: %s", err))
+				return err
+			}
+			fs := len(file)
+			utils.PrintInfo(fmt.Sprintf("Scanning last_bad_bytes.exe, analyzing %d bytes...", fs))
+
+			if scanner.Scan("./debug/last_bad_bytes.exe", threat_names) == ThreatFound {
+				utils.PrintOk(fmt.Sprintf("Sanity check passed, windows defender detected a threat in 'last_bad_bytes.exe' [0x0 to 0x%X]", fs))
+			} else {
+				utils.PrintErr("Sanity check failed, windows defender did not detect a threat in the last bad bytes")
+			}
+
+			utils.PrintDebugNewLine(debug)
+			utils.PrintInfo("Saving last good bytes to: last_good_bytes.exe")
+
+			err = os.WriteFile("./debug/last_good_bytes.exe", original_file[tf_lower:tnf_upper], 0o644)
+			if err != nil {
+				utils.PrintErr(fmt.Sprintf("failed to write to last_good_bytes.exe: %s", err))
+				return err
+			}
+			file, err = os.ReadFile("./debug/last_good_bytes.exe")
+			if err != nil {
+				utils.PrintErr(fmt.Sprintf("failed to read last_good_bytes.exe: %s", err))
+				return err
+			}
+
+			fs = len(file)
+			utils.PrintInfo(fmt.Sprintf("Scanning last_good_bytes.exe, analyzing %d bytes...", fs))
+
+			if scanner.Scan("last_good_bytes.bin", threat_names) == ThreatFound {
+				utils.PrintErr(fmt.Sprintf("Sanity check failed, windows defender detected a threat in 'last_good_bytes.exe' [0x0 to 0x%X]", fs))
+			} else {
+				utils.PrintOk(fmt.Sprintf("Sanity check passed, windows defender did not detect a threat in 'last_good_bytes.exe' [0x0 to 0x%X]", fs))
+			}
+
+			utils.PrintDebugNewLine(debug)
+		}
 
 		/*
 			This only hits once the binary search has been exhausted, i.e: the range between the upperBound and lastGood is 0
@@ -129,13 +211,13 @@ func ScanWindef(token Scanner) error {
 		utils.PrintErr(fmt.Sprintf("Isolated bad bytes at offset 0x%X in the original file [approximately %d / %d bytes]", lastGood, lastGood, size))
 
 		/* Add 64 bytes before the offset */
-		start := lastGood - 64
+		start := lastGood - 32
 		if start < 0 {
 			start = 0
 		}
 
 		/* Add 64 bytes after the offset */
-		end := mid + 64
+		end := mid + 32
 		if end > len(original_file) {
 			end = len(original_file)
 		}
@@ -150,7 +232,7 @@ func ScanWindef(token Scanner) error {
 		}
 
 		for threat := range uniqueThreats {
-			utils.PrintErr(threat)
+			utils.PrintInfo(threat)
 		}
 
 		utils.PrintNewLine()

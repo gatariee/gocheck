@@ -28,10 +28,14 @@ var checkCmd = &cobra.Command{
 		file := args[0]
 		amsi, _ := cmd.Flags().GetBool("amsi")
 		defender, _ := cmd.Flags().GetBool("defender")
+		debug, _ := cmd.Flags().GetBool("debug")
+
+		if debug {
+			utils.PrintInfo("Debug mode enabled, verbose output will be displayed")
+		}
 
 		if !amsi && !defender {
 			/* Assume that the user wants to use defender */
-			utils.PrintInfo("No flags provided, defaulting to Windows Defender")
 			defender = true
 		}
 
@@ -60,7 +64,7 @@ var checkCmd = &cobra.Command{
 		}
 
 		start := time.Now()
-		scanner.Run(token)
+		scanner.Run(token, debug)
 		elapsed := time.Since(start)
 
 		utils.PrintOk(fmt.Sprintf("Total time elasped: %s", elapsed))
@@ -69,9 +73,9 @@ var checkCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(checkCmd)
-
 	checkCmd.Flags().BoolP("amsi", "a", false, "Use AMSI to scan the binary")
 	checkCmd.Flags().BoolP("defender", "d", false, "Use Windows Defender to scan the binary")
+	checkCmd.Flags().BoolP("debug", "D", false, "Enable debug mode")
 }
 
 func GetFileSize(file string) (int64, error) {
@@ -101,6 +105,7 @@ func FindDefenderPath(root string) (string, error) {
 
 	var defenderPath string
 	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
+
 		if err != nil {
 
 			/* If error is due to permission, don't panic just yet */

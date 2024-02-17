@@ -90,7 +90,7 @@ func (as *AMSIScanner) Go(amsi_instance *AMSIScanner, file_path string) (int, er
 	return mid, nil
 }
 
-func ScanAMSI(filePath string) error {
+func ScanAMSI(filePath string, debug bool) error {
 	scanner := newAMSIScanner()
 	original_file, err := os.ReadFile(filePath)
 	if err != nil {
@@ -124,7 +124,7 @@ func ScanAMSI(filePath string) error {
 			return err
 		}
 
-		utils.PrintInfo(fmt.Sprintf("Isolated bad bytes at offset 0x%X in the original file [approximately %d / %d bytes]", offset, offset, len(original_file)))
+		utils.PrintErr(fmt.Sprintf("Isolated bad bytes at offset 0x%X in the original file [approximately %d / %d bytes]", offset, offset, len(original_file)))
 
 		start := offset - 64
 		if start < 0 {
