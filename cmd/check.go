@@ -105,7 +105,6 @@ func FindDefenderPath(root string) (string, error) {
 
 	var defenderPath string
 	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
-
 		if err != nil {
 
 			/* If error is due to permission, don't panic just yet */

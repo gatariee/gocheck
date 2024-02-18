@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/garethjensen/amsi"
 
@@ -91,7 +92,10 @@ func (as *AMSIScanner) Go(amsi_instance *AMSIScanner, file_path string) (int, er
 }
 
 func ScanAMSI(filePath string, debug bool) error {
+	/* Setup */
 	scanner := newAMSIScanner()
+	start_time := time.Now()
+
 	original_file, err := os.ReadFile(filePath)
 	if err != nil {
 		return err
@@ -118,11 +122,18 @@ func ScanAMSI(filePath string, debug bool) error {
 		utils.PrintErr("Scan was blocked for some reason, got 'AMSI_RESULT_BLOCKED_BY_ADMIN_END'")
 	case amsi.ResultDetected:
 		/* Continue, let's do our binary search now! */
+		utils.PrintNewLine()
 		utils.PrintInfo("Threat detected in original file, beginning AMSI binary search...")
 		offset, err := scanner.Go(scanner, filePath)
 		if err != nil {
 			return err
 		}
+
+		/* Binary search is over */
+		end_time := time.Since(start_time)
+
+		utils.PrintNewLine()
+		utils.PrintOk(fmt.Sprintf("AMSI - %s", end_time))
 
 		utils.PrintErr(fmt.Sprintf("Isolated bad bytes at offset 0x%X in the original file [approximately %d / %d bytes]", offset, offset, len(original_file)))
 

@@ -7,6 +7,8 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
+	"sync"
+	"time"
 
 	utils "github.com/gatariee/gocheck/utils"
 )
@@ -14,6 +16,23 @@ import (
 type DefenderScanner struct {
 	Path string
 }
+
+type ScanResult string
+
+type Progress struct {
+	Low       int
+	High      int
+	Malicious bool
+}
+
+const (
+	NoThreatFound ScanResult = "NoThreatFound"
+	ThreatFound   ScanResult = "ThreatFound"
+	ThreatName    ScanResult = "ThreatName"
+	FileNotFound  ScanResult = "FileNotFound"
+	Timeout       ScanResult = "Timeout"
+	Error         ScanResult = "Error"
+)
 
 func newDefenderScanner(path string) *DefenderScanner {
 	return &DefenderScanner{Path: path}
@@ -55,6 +74,33 @@ func (ds *DefenderScanner) Scan(filePath string, threat_names chan string) ScanR
 func ScanWindef(token Scanner, debug bool) error {
 	/* Setup */
 	scanner := newDefenderScanner(token.EnginePath)
+	start := time.Now()
+	ticker := time.NewTicker(time.Duration(2 * float64(time.Second)))
+	defer ticker.Stop()
+
+	progressUpdates := make(chan Progress)
+	var wg sync.WaitGroup
+
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		for {
+			select {
+			case <-ticker.C:
+				progress, ok := <-progressUpdates
+				if !ok {
+					return
+				}
+				current := time.Since(start)
+				utils.PrintErr(fmt.Sprintf("0x%X -> 0x%X - malicious: %t - %s", progress.Low, progress.High, progress.Malicious, current))
+			case _, ok := <-progressUpdates:
+				/* ticker.C is not ready, but the channel is closed- we don't want to bottleneck the program */
+				if !ok {
+					return
+				}
+			}
+		}
+	}()
 
 	utils.PrintDebug(fmt.Sprintf("Scanning %s with Windows Defender...", token.File), debug)
 
@@ -82,6 +128,8 @@ func ScanWindef(token Scanner, debug bool) error {
 	} else {
 		utils.PrintInfo("Threat detected in the original file, beginning binary search...")
 	}
+
+	utils.PrintNewLine()
 
 	/* Create a temporary directory to store the scanning files */
 	tempDir := filepath.Join(os.TempDir(), "gocheck")
@@ -111,6 +159,7 @@ func ScanWindef(token Scanner, debug bool) error {
 		utils.PrintDebug(fmt.Sprintf("scanning from 0 to %d bytes", mid), debug)
 
 		if scanner.Scan(testFilePath, threat_names) == ThreatFound {
+			progressUpdates <- Progress{Low: tf_lower, High: mid, Malicious: true}
 
 			utils.PrintDebug(fmt.Sprintf("threat detected in the range 0 to %d bytes", mid), debug)
 
@@ -123,6 +172,7 @@ func ScanWindef(token Scanner, debug bool) error {
 			/* Save the last found threat range */
 			tf_upper = mid
 		} else {
+			progressUpdates <- Progress{Low: tf_lower, High: mid, Malicious: false}
 			utils.PrintDebug(fmt.Sprintf("no threat detected in the range 0 to %d bytes", mid), debug)
 			/*
 				We didn't find a threat in this slice, so we flip to the other half of the slice.
@@ -135,6 +185,10 @@ func ScanWindef(token Scanner, debug bool) error {
 
 		utils.PrintDebugNewLine(debug)
 	}
+
+	/* Binary search is over, let's start cleaning up */
+	os.RemoveAll(tempDir) // incase the defer doesn't work for some reason
+	end := time.Since(start)
 
 	if threatFound {
 
@@ -208,15 +262,17 @@ func ScanWindef(token Scanner, debug bool) error {
 		*/
 
 		utils.PrintNewLine()
+
+		utils.PrintOk(fmt.Sprintf("Windows Defender - %s", end))
 		utils.PrintErr(fmt.Sprintf("Isolated bad bytes at offset 0x%X in the original file [approximately %d / %d bytes]", lastGood, lastGood, size))
 
-		/* Add 64 bytes before the offset */
+		/* Add 32 bytes before the offset */
 		start := lastGood - 32
 		if start < 0 {
 			start = 0
 		}
 
-		/* Add 64 bytes after the offset */
+		/* Add 32 bytes after the offset */
 		end := mid + 32
 		if end > len(original_file) {
 			end = len(original_file)
@@ -241,7 +297,10 @@ func ScanWindef(token Scanner, debug bool) error {
 	}
 
 	/* End */
+	ticker.Stop()
 	os.Remove(testFilePath)
+	close(progressUpdates)
 	close(threat_names)
+
 	return nil
 }
