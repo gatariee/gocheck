@@ -7,17 +7,32 @@ I also wrote a blog post showcasing this project: [Identifying Malicious Bytes i
 
 ![GoCheck2](./assets/cobalt.gif)
 
+## Installation
+You can install `gocheck` from `go install`
+```bash
+go install github.com/gatariee/gocheck@latest
+```
+
+Alternatively, you can download the precompiled binaries from the [releases](https://github.com/gatariee/gocheck/releases) or build it yourself.
+```bash
+git clone https://github.com/gatariee/gocheck
+make [ windows / win64 / win32 ]
+```
+
 ## Usage
 ```cmd
 $ gocheck check --help
 Usage:
-  gocheck check [flags]
+  gocheck check [path_to_bin] /optional [flags]
 
 Flags:
-  -a, --amsi          Use AMSI to scan a file
-  -d, --defender      Use Windows Defender to scan a binary
-  -f, --file string   Binary to check
-  -h, --help          help for check
+  -a, --amsi        Use AMSI to scan the binary
+  -D, --debug       Enable debug mode
+  -d, --defender    Use Windows Defender to scan the binary
+  -h, --help        help for check
+
+  [!] UNSTABLE
+  -k, --kaspersky   Use Kaspersky's AV Engine to scan the binary
 ```
 
 ## Quick Use
@@ -49,12 +64,25 @@ Add-MpPreference -ExclusionPath [path_to_folder]
 ```
 ![amsi](https://i.gyazo.com/0c0a437eafe2c945c7d1188fdd9ec86d.png)
 
-## Both Windows Defender & AMSI
-You can also scan using both Windows Defender and AMSI at the same time.
+## External Scanners
+There is currently only support for [Kaspersky](https://www.kaspersky.com/security-cloud)'s Security Cloud AV Engine. The `--kaspersky` flag can be used to scan the binary using Kaspersky's AV Engine.
+
+There **are** plans to integrate more AV engines in the future.
+
+> It is normal for Kaspersky's AV engine to take a little longer than Windows Defender to scan the binary.
 ```cmd
-gocheck [path_to_file] /optional: --defender --amsi
+gocheck [path_to_file] /optional: --kaspersky
 ```
-![both](https://i.gyazo.com/5bb7681b57cd8736329ccd22ac7e9d7c.png)
+![kaspersky](https://i.gyazo.com/346a57bb13a2b6fef5f6ae889c9e45d2.png)
+
+## Concurrency
+`gocheck` allows you to scan a binary using multiple AV engines simultaneously. This is done by passing multiple flags to `gocheck`. 
+
+For example, to scan a binary using both **Windows Defender** and **Kaspersky's AV Engine**, you can pass the following flags to `gocheck` & the results will be returned at runtime.
+```cmd
+gocheck [path_to_file] /optional: --defender --kaspersky
+```
+![kaspersky2](https://i.gyazo.com/3cd9b23ab285c33804a11c7440b1cdfc.png)
 
 ## Debug
 Gocheck is in heavy WIP and may not work as expected. If you encounter any issues, please run the tool with `--debug` to provide more information about the issue. The `--debug` flag prints out which portions of the binary are being scanned, as well as sanity checks to ensure that the signatured portions are being correctly scanned. 
@@ -63,40 +91,18 @@ gocheck [path_to_file] /optional: --debug
 ```
 ![debug](https://i.gyazo.com/c6bb797e5b507b2ba7fc0d007575a410.png)
 
-## Installation
-You can install `gocheck` from `go install`
-```bash
-go install github.com/gatariee/gocheck@latest
-```
+## Common Pitfalls
+1. You may need to set exclusions when using `gocheck` to prevent the file from being nuked on first scan, here's how `gocheck` works under the hood:
+    * `gocheck` first passes the original file to `MpCmdRun.exe` to scan the file using Windows Defender -> (e.g ./mimikatz.exe)
+    * If the scan comes back malicious, we create a folder in the **current working directory** with the respective name of the scanner (e.g `windef`).
+    * Then, we start splitting the file (with reference to the original file), and writing the split bytes to the respective folder (e.g `windef`).
 
-Alternatively, you can download the precompiled binaries from the [releases](https://github.com/gatariee/gocheck/releases) or build it yourself.
-```bash
-git clone https://github.com/gatariee/gocheck
-make [ windows / win64 / win32 ]
-```
+      > There are multiple exclusions you need to set, or you can exclude the entire folder where `gocheck` is located.
+  
+2. Where possible, we try to pass in flags that are not destructive such as `-DisableRemediation` for Windows Defender and `/i0` for Kaspersky's AV Engine. However, whether the file gets sent to the cloud for further analysis **is not** within our control.
+    * It is ultimately the responsibility of the operator to assume that the AV engine **will** try it's best to send all binaries to the cloud for further analysis; and to take the necessary precautions to prevent this from happening such as disabling internet access.
 
-### Evasion Usage
-You can use `gocheck` to identify bad bytes, and then pass the identified offset of bad bytes into [ghidra](https://github.com/NationalSecurityAgency/ghidra) (or, any other decompiler) to hopefully decompile the binary and locate the bad bytes in a function.
 
-I'll be using `ghidra` to decompile the binary since I'm more familiar with it. (and, it's free)
-#### 1. Check for Bad Bytes
-```cmd
-$ gocheck <file> /optional:args
-```
-
-![1](./assets/f14b57d0ca353d1de97ec67c98512cd1.png)
-* Identified bad bytes at offset **0x9DD** (from start of binary)
-* 16 bytes **before & after** the bad bytes are also printed for context, but doesn't help much in this case.
-
-#### 2. Open the binary in Ghidra
-* Navigation -> Go To... -> **FILE ( 0x9DD )**
-  * Alternatively, `G` also brings up the same dialog.
-
-![2](./assets/587cc1659ee36bfb12a9f2525fac40cb.png)
-
-* The bad bytes are identified after a call to `VirtualAlloc` and before a call to `VirtualProtect` in this case, which should be easy to find in the artifact kit.
-
-![3](./assets/f6386e807de01acfa9bc301e2c0920c9.png)
 
 ## Benchmark
 > ⚠️ I am not an expert in benchmarking, and the following benchmarks are conducted on a single machine, and the results may vary on different machines. The benchmarks are conducted on a single machine to provide a rough estimate of the performance difference between `gocheck` and `DefenderCheck`.

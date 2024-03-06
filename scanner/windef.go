@@ -132,7 +132,7 @@ func ScanWindef(token Scanner, debug bool) error {
 	utils.PrintNewLine()
 
 	/* Create a temporary directory to store the scanning files */
-	tempDir := filepath.Join(os.TempDir(), "gocheck")
+	tempDir := filepath.Join(".", "windef")
 
 	/* TODO: Check whether the parent directory has an exclusion, or to perform a sanity check to ensure that MpCmdRun.exe is actually working */
 	os.MkdirAll(tempDir, 0o755)

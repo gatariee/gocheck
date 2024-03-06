@@ -11,6 +11,7 @@ type Scanner struct {
 	Amsi       bool
 	Defender   bool
 	EnginePath string
+	Additional map[string]string
 }
 
 func Run(token Scanner, debug bool) {
@@ -37,6 +38,22 @@ func Run(token Scanner, debug bool) {
 				errors <- err
 			}
 		}()
+	}
+
+	if token.Additional != nil {
+		for k, v := range token.Additional {
+			switch k {
+			case "kaspersky":
+				wg.Add(1)
+				go func(file, value string) {
+					defer wg.Done()
+					err := KasperskyRun(file, value, debug)
+					if err != nil {
+						errors <- err
+					}
+				}(token.File, v)
+			}
+		}
 	}
 
 	wg.Wait()

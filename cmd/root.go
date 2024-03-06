@@ -44,6 +44,11 @@ func Execute() {
 }
 
 func init() {
+	rootCmd.AddCommand(checkCmd)
 	rootCmd.Version = VERSION
 	rootCmd.SetVersionTemplate("GoCheck version {{.Version}}\n")
+
+	rootCmd.Root().CompletionOptions.DisableDefaultCmd = true
+	rootCmd.Root().CompletionOptions.DisableDescriptions = true
+	rootCmd.SetHelpCommand(&cobra.Command{Use: "no-help", Run: func(cmd *cobra.Command, args []string) { /* Do nothing */ }})
 }

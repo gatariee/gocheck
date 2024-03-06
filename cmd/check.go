@@ -29,14 +29,10 @@ var checkCmd = &cobra.Command{
 		amsi, _ := cmd.Flags().GetBool("amsi")
 		defender, _ := cmd.Flags().GetBool("defender")
 		debug, _ := cmd.Flags().GetBool("debug")
+		kaspersky, _ := cmd.Flags().GetBool("kaspersky")
 
 		if debug {
 			utils.PrintInfo("Debug mode enabled, verbose output will be displayed")
-		}
-
-		if !amsi && !defender {
-			/* Assume that the user wants to use defender */
-			defender = true
 		}
 
 		var (
@@ -56,11 +52,36 @@ var checkCmd = &cobra.Command{
 			defender_path = ""
 		}
 
+		var avp string
+		if kaspersky {
+			avp, err = scanner.FindKaspersky()
+			if err != nil {
+				utils.PrintErr(err.Error())
+				return
+			}
+
+			if avp == "" {
+				utils.PrintErr("Kaspersky not found, please ensure it's installed and the path is correct")
+				utils.PrintInfo("Kaspersky is probably installed at > ")
+				fmt.Println("\t", scanner.ScanPath)
+				fmt.Println("\t", scanner.AltScanPath)
+				return
+			}
+
+			utils.PrintInfo(fmt.Sprintf("Found Kaspersky at %s", avp))
+		}
+
+		additionals := make(map[string]string)
+		if kaspersky {
+			additionals["kaspersky"] = avp
+		}
+
 		token := scanner.Scanner{
 			File:       file,
 			Amsi:       amsi,
 			Defender:   defender,
 			EnginePath: defender_path,
+			Additional: additionals,
 		}
 
 		start := time.Now()
@@ -69,13 +90,6 @@ var checkCmd = &cobra.Command{
 
 		utils.PrintOk(fmt.Sprintf("Total time elasped: %s", elapsed))
 	},
-}
-
-func init() {
-	rootCmd.AddCommand(checkCmd)
-	checkCmd.Flags().BoolP("amsi", "a", false, "Use AMSI to scan the binary")
-	checkCmd.Flags().BoolP("defender", "d", false, "Use Windows Defender to scan the binary")
-	checkCmd.Flags().BoolP("debug", "D", false, "Enable debug mode")
 }
 
 func GetFileSize(file string) (int64, error) {
@@ -122,4 +136,11 @@ func FindDefenderPath(root string) (string, error) {
 		return nil
 	})
 	return defenderPath, err
+}
+
+func init() {
+	checkCmd.Flags().BoolP("amsi", "a", false, "Use AMSI to scan the binary")
+	checkCmd.Flags().BoolP("defender", "d", false, "Use Windows Defender to scan the binary")
+	checkCmd.Flags().BoolP("kaspersky", "k", false, "Use Kaspersky to scan the binary")
+	checkCmd.Flags().BoolP("debug", "D", false, "Enable debug mode")
 }
