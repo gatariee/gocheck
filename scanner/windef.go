@@ -75,9 +75,9 @@ func ScanWindef(token Scanner, debug bool) error {
 	/* Setup */
 	scanner := newDefenderScanner(token.EnginePath)
 	start := time.Now()
+	
 	ticker := time.NewTicker(time.Duration(2 * float64(time.Second)))
 	defer ticker.Stop()
-
 	progressUpdates := make(chan Progress)
 	var wg sync.WaitGroup
 
@@ -94,7 +94,11 @@ func ScanWindef(token Scanner, debug bool) error {
 				current := time.Since(start)
 				utils.PrintErr(fmt.Sprintf("0x%X -> 0x%X - malicious: %t - %s", progress.Low, progress.High, progress.Malicious, current))
 			case _, ok := <-progressUpdates:
+<<<<<<< Updated upstream
 				/* we don't want the scanner to wait for ticker.C to reopen, so we need to handle this case */
+=======
+				/* ticker.C is not ready, but the channel is closed- we don't want the scanner to wait for ticker.C to reopen */
+>>>>>>> Stashed changes
 				if !ok {
 					return
 				}
