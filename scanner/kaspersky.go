@@ -7,15 +7,13 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"strings"
 	"sync"
 	"time"
 
 	utils "github.com/gatariee/gocheck/utils"
 )
 
-
-func Scan(file string, scanPath string, args ...string) (string, error) {
+func KasperskyScan(file string, scanPath string, args ...string) (string, error) {
 	scanCmd := exec.Command(scanPath, append(Kaspersky.Arguments, file)...)
 	var out, stderr bytes.Buffer
 	scanCmd.Stdout = &out
@@ -25,38 +23,6 @@ func Scan(file string, scanPath string, args ...string) (string, error) {
 
 	output := out.String()
 	return output, nil
-}
-
-func IsMalicious(output string, detectionString string) bool {
-	lines := strings.Split(output, "\n")
-	for _, line := range lines {
-		if strings.Contains(line, detectionString) {
-			/* This might be a problem */
-			return true
-		}
-	}
-	return false
-}
-
-func GetSignature(output string) string {
-	lines := strings.Split(output, "\n")
-	for _, line := range lines {
-		if strings.Contains(line, "HEUR:") {
-			parts := strings.Fields(line)
-			for _, part := range parts {
-				if strings.Contains(part, "HEUR:") {
-					return part
-				}
-			}
-		}
-	}
-
-	return "No signature found"
-}
-
-func CheckIfExists(path string) bool {
-	_, err := os.Stat(path)
-	return err == nil
 }
 
 func KasperskyRun(file string, scanPath string, debug bool) error {
@@ -105,7 +71,7 @@ func KasperskyRun(file string, scanPath string, debug bool) error {
 	size := len(original_file)
 
 	/* Scan original file! */
-	output, err := Scan(file, scanPath)
+	output, err := KasperskyScan(file, scanPath)
 	if err != nil {
 		return err
 	}
@@ -115,7 +81,7 @@ func KasperskyRun(file string, scanPath string, debug bool) error {
 	if IsMalicious(output, Kaspersky.DetectionString) {
 		/* We found something! */
 		utils.PrintErr("Threat detected in the original file, beginning binary search...")
-		threat_names <- GetSignature(output)
+		threat_names <- GetSignature(output, Kaspersky.SignatureString)
 	} else {
 		/* found nothing, time to die */
 		utils.PrintErr("No threat detected in the original file, dying now")
@@ -142,7 +108,7 @@ func KasperskyRun(file string, scanPath string, debug bool) error {
 
 		utils.PrintDebug(fmt.Sprintf("Scanning from %d to %d bytes", tf_lower, mid), debug)
 
-		output, err := Scan(testFilePath, scanPath)
+		output, err := KasperskyScan(testFilePath, scanPath)
 		if err != nil {
 			return err
 		}
@@ -209,7 +175,7 @@ func KasperskyRun(file string, scanPath string, debug bool) error {
 func FindKaspersky() (string, error) {
 	var avp string
 	for _, path := range []string{Kaspersky.ScanPath, Kaspersky.AltScanPath} {
-		if CheckIfExists(path) {
+		if utils.CheckIfExists(path) {
 			avp = path
 			break
 		}

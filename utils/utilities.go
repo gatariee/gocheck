@@ -2,7 +2,7 @@ package utils
 
 import (
 	"fmt"
-
+	"os"
 	"github.com/fatih/color"
 )
 
@@ -36,4 +36,9 @@ func PrintDebugNewLine(debug bool) {
 	if debug {
 		fmt.Println("")
 	}
+}
+
+func CheckIfExists(path string) bool {
+	_, err := os.Stat(path)
+	return err == nil
 }
