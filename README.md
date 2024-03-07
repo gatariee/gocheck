@@ -1,14 +1,12 @@
 # GoCheck
 
-GoCheck extends the capabilities of Matterpreter's [DefenderCheck](https://github.com/matterpreter/DefenderCheck) by introducing concurrency, better performance and (limited) integration with enterprise antivirus solutions. See: [External Scanners)(#external-scanners)
-
-GoCheck an alternative to Matterpreter's [DefenderCheck](https://github.com/matterpreter/DefenderCheck) which identifies the exact bytes that Windows Defender AV by feeding byte slices to `MpCmdRun.exe`
+GoCheck extends the capabilities of Matterpreter's [DefenderCheck](https://github.com/matterpreter/DefenderCheck) by introducing concurrency, better performance and **limited integration** with enterprise antivirus solutions (see: [External Scanners](#external-scanners))
 
 I also wrote a blog post showcasing this project: [Identifying Malicious Bytes in Malware](https://gatari.dev/posts/identifying-malicious-bytes-in-malware/)
 
 ![both](https://i.gyazo.com/5bb7681b57cd8736329ccd22ac7e9d7c.png)
 
-![GoCheck2](./assets/cobalt.gif)
+![kaspersky](https://i.gyazo.com/346a57bb13a2b6fef5f6ae889c9e45d2.png)
 
 ## Installation
 You can install `gocheck` from `go install`
