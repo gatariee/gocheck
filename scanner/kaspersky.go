@@ -14,13 +14,9 @@ import (
 	utils "github.com/gatariee/gocheck/utils"
 )
 
-const (
-	ScanPath    = "C:\\Program Files (x86)\\Kaspersky Lab\\Kaspersky Security Cloud 21.3\\avp.com"
-	AltScanPath = "C:\\Program Files\\Kaspersky Lab\\Kaspersky Security Cloud 21.3\\avp.com"
-)
 
-func Scan(file string, scanPath string) (string, error) {
-	scanCmd := exec.Command(scanPath, "SCAN", file, "/i0")
+func Scan(file string, scanPath string, args ...string) (string, error) {
+	scanCmd := exec.Command(scanPath, append(Kaspersky.Arguments, file)...)
 	var out, stderr bytes.Buffer
 	scanCmd.Stdout = &out
 	scanCmd.Stderr = &stderr
@@ -31,10 +27,10 @@ func Scan(file string, scanPath string) (string, error) {
 	return output, nil
 }
 
-func IsMalicious(output string) bool {
+func IsMalicious(output string, detectionString string) bool {
 	lines := strings.Split(output, "\n")
 	for _, line := range lines {
-		if strings.Contains(line, "suspicion") {
+		if strings.Contains(line, detectionString) {
 			/* This might be a problem */
 			return true
 		}
@@ -116,7 +112,7 @@ func KasperskyRun(file string, scanPath string, debug bool) error {
 
 	utils.PrintNewLine()
 
-	if IsMalicious(output) {
+	if IsMalicious(output, Kaspersky.DetectionString) {
 		/* We found something! */
 		utils.PrintErr("Threat detected in the original file, beginning binary search...")
 		threat_names <- GetSignature(output)
@@ -151,7 +147,7 @@ func KasperskyRun(file string, scanPath string, debug bool) error {
 			return err
 		}
 
-		if IsMalicious(output) {
+		if IsMalicious(output, Kaspersky.DetectionString) {
 			progressUpdates <- Progress{Low: tf_lower, High: mid, Malicious: true}
 			utils.PrintDebug(fmt.Sprintf("Threat detected in the range %d to %d bytes", tf_lower, mid), debug)
 			/* Found a threat */
@@ -212,7 +208,7 @@ func KasperskyRun(file string, scanPath string, debug bool) error {
 
 func FindKaspersky() (string, error) {
 	var avp string
-	for _, path := range []string{ScanPath, AltScanPath} {
+	for _, path := range []string{Kaspersky.ScanPath, Kaspersky.AltScanPath} {
 		if CheckIfExists(path) {
 			avp = path
 			break

@@ -63,8 +63,8 @@ var checkCmd = &cobra.Command{
 			if avp == "" {
 				utils.PrintErr("Kaspersky not found, please ensure it's installed and the path is correct")
 				utils.PrintInfo("Kaspersky is probably installed at > ")
-				fmt.Println("\t", scanner.ScanPath)
-				fmt.Println("\t", scanner.AltScanPath)
+				fmt.Println("\t", scanner.Kaspersky.ScanPath)
+				fmt.Println("\t", scanner.Kaspersky.AltScanPath)
 				return
 			}
 
