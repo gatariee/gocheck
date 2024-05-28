@@ -37,7 +37,7 @@ Flags:
 ```
 
 ## Quick Use
-The `check` cobra flag is only used for ease of extensibility in the event that I finally decide to integrate [Ghidra's Headless Analyzer](https://static.grumpycoder.net/pixel/support/analyzeHeadlessREADME.html) with `gocheck`. For ease of use, you can actually completely omit the `check` flag and directly pass the file to `gocheck` as an argument.
+The `check` cobra flag is only used for ease of extensibility, you can completely omit the `check` flag and directly pass the file to `gocheck` as an argument.
 
 ```cmd
 $ gocheck <file> /optional:args
