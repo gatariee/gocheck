@@ -1,6 +1,6 @@
-# GoCheck
+# gocheck 
 
-GoCheck extends the capabilities of Matterpreter's [DefenderCheck](https://github.com/matterpreter/DefenderCheck) by introducing concurrency, better performance and **limited integration** with enterprise antivirus solutions (see: [External Scanners](#external-scanners))
+gocheck is a golang implementation of Matterpreter's [DefenderCheck](https://github.com/matterpreter/DefenderCheck) that aims to aid red teams in their malware development capabilities by identifying the exact bytes in their malware that are flagged by security solutions (incomplete integration with enterprise AV, see [External Scanners](#external-scanners))
 
 I also wrote a blog post showcasing this project: [Identifying Malicious Bytes in Malware](https://gatari.dev/posts/identifying-malicious-bytes-in-malware/)
 
