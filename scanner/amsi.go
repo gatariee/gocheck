@@ -50,6 +50,7 @@ func (as *AMSIScanner) Go(amsi_instance *AMSIScanner, file_path string) (int, er
 
 	tempDir := filepath.Join(".", "temp")
 	err = os.MkdirAll(tempDir, 0o755)
+	// TODO: Fix race condition when scanning multiple files (see: https://go.dev/tour/concurrency/9)
 	if err != nil {
 		return 0, err
 	}
