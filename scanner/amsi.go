@@ -46,7 +46,7 @@ func (as *AMSIScanner) Go(amsi_instance *AMSIScanner, file_path string) (int, er
 		return 0, err
 	}
 	size := len(start)
-	utils.PrintInfo(fmt.Sprintf("Scanning %s, analyzing %d bytes...", file_path, size))
+	utils.PrintInfo(fmt.Sprintf("Scanning %s, analysing %d bytes...", file_path, size))
 
 	tempDir := filepath.Join(".", "temp")
 	err = os.MkdirAll(tempDir, 0o755)
