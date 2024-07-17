@@ -119,7 +119,7 @@ func ScanWindef(token Scanner, debug bool) error {
 	}()
 
 	size := len(original_file)
-	utils.PrintInfo(fmt.Sprintf("Scanning %s, analyzing %d bytes...", token.File, size))
+	utils.PrintInfo(fmt.Sprintf("Scanning %s, analysing %d bytes...", token.File, size))
 
 	/* Scan the original file, if the original file isn't flagged as malicious, don't begin the binary search */
 	if scanner.Scan(token.File, threat_names) == NoThreatFound {
@@ -222,7 +222,7 @@ func ScanWindef(token Scanner, debug bool) error {
 				return err
 			}
 			fs := len(file)
-			utils.PrintInfo(fmt.Sprintf("Scanning last_bad_bytes.exe, analyzing %d bytes...", fs))
+			utils.PrintInfo(fmt.Sprintf("Scanning last_bad_bytes.exe, analysing %d bytes...", fs))
 
 			if scanner.Scan("./debug/last_bad_bytes.exe", threat_names) == ThreatFound {
 				utils.PrintOk(fmt.Sprintf("Sanity check passed, windows defender detected a threat in 'last_bad_bytes.exe' [0x0 to 0x%X]", fs))
@@ -245,7 +245,7 @@ func ScanWindef(token Scanner, debug bool) error {
 			}
 
 			fs = len(file)
-			utils.PrintInfo(fmt.Sprintf("Scanning last_good_bytes.exe, analyzing %d bytes...", fs))
+			utils.PrintInfo(fmt.Sprintf("Scanning last_good_bytes.exe, analysing %d bytes...", fs))
 
 			if scanner.Scan("last_good_bytes.bin", threat_names) == ThreatFound {
 				utils.PrintErr(fmt.Sprintf("Sanity check failed, windows defender detected a threat in 'last_good_bytes.exe' [0x0 to 0x%X]", fs))
