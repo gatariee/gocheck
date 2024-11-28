@@ -263,9 +263,7 @@ func ScanWindef(token Scanner, debug bool) error {
 
 		utils.PrintNewLine()
 
-		utils.PrintOk(fmt.Sprintf("Windows Defender - %s", end))
 		utils.PrintErr(fmt.Sprintf("Isolated bad bytes at offset 0x%X in the original file [approximately %d / %d bytes]", lastGood, lastGood, size))
-
 		/* Add 32 bytes before the offset */
 		start := lastGood - 32
 		if start < 0 {
@@ -284,8 +282,7 @@ func ScanWindef(token Scanner, debug bool) error {
 		for threat := range uniqueThreats {
 			utils.PrintInfo(threat)
 		}
-
-		utils.PrintNewLine()
+		utils.PrintOk(fmt.Sprintf("Windows Defender - %s", end))
 	} else {
 		utils.PrintInfo("No threat detected, but the original file was flagged as malicious. The bad bytes are likely at the very end of the binary.")
 	}

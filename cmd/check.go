@@ -31,6 +31,14 @@ var checkCmd = &cobra.Command{
 		debug, _ := cmd.Flags().GetBool("debug")
 		kaspersky, _ := cmd.Flags().GetBool("kaspersky")
 
+		//
+		// if no args are passed, then use defender
+		//
+
+		if !amsi && !defender && !kaspersky {
+			defender = true
+		}
+
 		if debug {
 			utils.PrintInfo("Debug mode enabled, verbose output will be displayed")
 		}
