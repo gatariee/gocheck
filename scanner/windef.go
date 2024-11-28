@@ -272,14 +272,8 @@ func ScanWindef(token Scanner, debug bool) error {
 			start = 0
 		}
 
-		/* Add 32 bytes after the offset */
-		end := mid + 32
-		if end > len(original_file) {
-			end = len(original_file)
-		}
-
 		/* Start printing the hex dump */
-		threatData := original_file[start:end]
+		threatData := original_file[start:lastGood]
 		fmt.Println(HexDump(threatData))
 
 		uniqueThreats := make(map[string]bool)

@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/garethjensen/amsi"
+	"github.com/Velocidex/amsi"
 
 	utils "github.com/gatariee/gocheck/utils"
 )

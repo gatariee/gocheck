@@ -1,8 +1,8 @@
+github.com/Velocidex/amsi v0.0.0-20200608120838-e5d93b76f119 h1:eUSISb8p+ebTARWKDneug7IAsUdSWcKVWa/un5pROTY=
+github.com/Velocidex/amsi v0.0.0-20200608120838-e5d93b76f119/go.mod h1:kDUpg5jkpbB/2Lv9tyol1AyR/JOwcljtzYkzlX8pcms=
 github.com/cpuguy83/go-md2man/v2 v2.0.3/go.mod h1:tgQtvFlXSQOSOSIRvRPT7W67SCa46tRHOmNcaadrF8o=
 github.com/fatih/color v1.16.0 h1:zmkK9Ngbjj+K0yRhTVONQh1p/HknKYSlNT+vZCzyokM=
 github.com/fatih/color v1.16.0/go.mod h1:fL2Sau1YI5c0pdGEVCbKQbLXB6edEj1ZgiY4NijnWvE=
-github.com/garethjensen/amsi v0.0.0-20180303015433-eb8d5f740669 h1:AiQEkP6s81dg3b/+wwY4u2OJIPHyV28cSP9R1lV7imA=
-github.com/garethjensen/amsi v0.0.0-20180303015433-eb8d5f740669/go.mod h1:n0f50c5UcAiPwx6RJ9Ky0m376hHJqmKXjDyqmjnGajk=
 github.com/inconshreveable/mousetrap v1.1.0 h1:wN+x4NVGpMsO7ErUn/mUI3vEoE6Jt13X2s0bqwp9tc8=
 github.com/inconshreveable/mousetrap v1.1.0/go.mod h1:vpF70FUmC8bwa3OWnCshd2FqLfsEA9PFc4w1p2J65bw=
 github.com/mattn/go-colorable v0.1.13 h1:fFA4WZxdEF4tXPZVKMLwD8oUnCTTo08duU7wxecdEvA=
